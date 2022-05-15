@@ -1,8 +1,7 @@
 # ddl-to-object
 
-<center>
-Notice: STATUS  WIP
-</center>
+>   ## Notice: STATUS  WIP
+
 
 >   ddl-to-object: a tool help to generate object files in different languages from sql ddl file.
 
