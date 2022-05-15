@@ -16,5 +16,8 @@
 
 .idea/
 ddl-to-object
+ddl-to-object.exe
+
+.DS_Store
 
 release/

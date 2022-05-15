@@ -3,6 +3,7 @@ package lib
 import (
 	"bufio"
 	"errors"
+	"github.com/mitchellh/go-homedir"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -83,7 +84,8 @@ func ReadTemplate(language string) (*template.Template, error) {
 	templatePath := "./template/" + language + ".template"
 	existed, _ := PathExists(templatePath)
 	if !existed {
-		templatePath = "~/.dto/template/" + language + ".template"
+		homeTemplatePath := "~/.dto/template/" + language + ".template"
+		templatePath, _ = homedir.Expand(homeTemplatePath)
 	}
 	tpl, err := template.ParseFiles(templatePath)
 	if err != nil {
