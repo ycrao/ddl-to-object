@@ -1,6 +1,8 @@
 package example
 
-import "time"
+import (
+	"time"
+)
 
 // Article Object for article
 type Article struct {

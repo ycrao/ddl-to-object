@@ -1,0 +1,8 @@
+table name
+CREATE\s+TABLE\s+([`-zA-Z-_]+)
+filed and comment
+([\w\x60]+)\s+([\w\(\)",']+).*(COMMENT\s+["|'](.*)["|'])?,
+table comment
+\).*COMMENT\s+['|"](.*)['|"]
+\).*COMMENT\s+(?="|')(.*)(?<="|')
+

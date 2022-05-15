@@ -3,7 +3,7 @@
 namespace App\Models;
 
 /**
- * ArticleModel
+ * Article
  *
  * @property integer $id id
  * @property integer $user_id 用户id
@@ -11,7 +11,7 @@ namespace App\Models;
  * @property string $create_time 创建时间
  * @property string $update_time 更新时间
  */
-class ArticleModel {
+class Article {
 
     private $id = null;
 
@@ -49,7 +49,7 @@ class ArticleModel {
 }
 
 // TEST
-$article = new ArticleModel([
+$article = new Article([
     'id' => 1,
     'user_id' => 2,
     'content' => 'hello world',
