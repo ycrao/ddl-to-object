@@ -24,7 +24,7 @@
 
 Download targeted OS zip file, unzip it, and move the binary file (`ddl-to-object` or `ddl-to-object.exe`) to `usr/bin/` or other auto-load environment path. 
 
-By default, you need copy this project template files into to `~/.dto/templates` directory manually (note: `~` for current user home workdir).
+By default, you need copy this project template files into to `~/.dto/template` directory manually (note: `~` for current user home workdir).
 
 Then you run it in terminal from anywhere. Get helps from its help print or below.
 
@@ -61,7 +61,7 @@ See output directory.
 
 #### how to modify templates
 
-By default, you need copy this project template files into to `~/.dto/templates` directory manually (note: `~` for current user home workdir).
+As installation intro, default template files located in `~/.dto/template` directory (note: `~` for current user home workdir; if they're not existed, you need copy them by yourself manually) .
 
 The template is a raw text by using golang [text/template](https://pkg.go.dev/text/template) with `ParsedResult` type struct passed in. You can modify them as you can. 
 
