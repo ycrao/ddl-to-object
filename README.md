@@ -42,13 +42,22 @@ Then you run it in terminal from anywhere. Get helps from its help print or belo
   -t, --to path        output to target path or location, create directory automatically if it not existed
 ```
 
-#### usage example
+#### usage examples
 
 ```bash
 $ ddl-to-object php -f ./output/samples/example_3.ddl.txt -n Modules\\Blog\\Models -t ./output/php/
 $ ddl-to-object java -f ./output/samples/example_2.ddl.txt -p com.douyasi.sample.domain.entity -t ./output/java/
 $ ddl-to-object go -f ./output/sampls/example_3.ddl.txt -p models -t ./output/go/
 ```
+
+#### output examples
+
+See output directory.
+
+- [java](./output/java/Article.java)
+- [golang](./output/go/article_types.go)
+- [php](./output/php/Article.php)
+- [python](./output/python/article.py)
 
 #### how to modify templates
 
