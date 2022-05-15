@@ -1,0 +1,20 @@
+#// sql from quartz_scheduler java library
+#// with table prefix and all uppercase named words
+CREATE TABLE `QRTZ_SIMPROP_TRIGGERS` (
+  `SCHED_NAME` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TRIGGER_NAME` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TRIGGER_GROUP` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `STR_PROP_1` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `STR_PROP_2` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `STR_PROP_3` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `INT_PROP_1` int DEFAULT NULL,
+  `INT_PROP_2` int DEFAULT NULL,
+  `LONG_PROP_1` bigint DEFAULT NULL,
+  `LONG_PROP_2` bigint DEFAULT NULL,
+  `DEC_PROP_1` decimal(13,4) DEFAULT NULL,
+  `DEC_PROP_2` decimal(13,4) DEFAULT NULL,
+  `BOOL_PROP_1` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `BOOL_PROP_2` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`SCHED_NAME`,`TRIGGER_NAME`,`TRIGGER_GROUP`),
+  CONSTRAINT `qrtz_simprop_triggers_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
