@@ -1,11 +1,7 @@
 package lib
 
 import (
-	"bufio"
-	"encoding/json"
 	"errors"
-	"fmt"
-	"os"
 	"regexp"
 	"strings"
 )
@@ -19,6 +15,7 @@ type ParsedResult struct {
 	ObjectName          string
 	PascalObjectName    string
 	CamelObjectName     string
+	SnakeObjectName		string
 	TableComment        string
 	Columns             []Column
 }
@@ -50,25 +47,7 @@ type AdditionalAttr struct {
 	Nullable        bool
 }
 
-// example ddl:
-/*
-CREATE TABLE `s_blog`.`article` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `user_id` bigint NOT NULL COMMENT '用户id',
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '正文',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '文章';
-*/
-const Example = "CREATE TABLE `s_blog`.`article` (\n" +
-	"  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',\n" +
-	"  `user_id` bigint NOT NULL COMMENT '用户id',\n" +
-	"  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '正文',\n" +
-	"  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
-	"  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',\n" +
-	"  PRIMARY KEY (`id`)\n" +
-	") ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '文章';"
+
 
 const (
 	// TableNameRegex \x60 for `
@@ -82,31 +61,32 @@ const (
 )
 
 // Parse parse MySQL DDL
-func Parse(ddl string) {
-	tables, _ := parseTable(ddl)
-	fieldsStr, _ := getTableFieldsStr(ddl)
-	columns, _ := parseFields(fieldsStr)
-	bytes, _ := json.Marshal(columns)
-	fmt.Printf("%v", tables)
-	// fmt.Printf("%v", columns)
-	fmt.Println("")
-	fmt.Println(string(bytes))
-	filePath := "./json.json"
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
-	if err != nil {
-		fmt.Println("文件打开失败", err)
+func Parse(ddl string) (ParsedResult, error) {
+	var parsedResult ParsedResult
+	table, tableComment, err1 := parseTable(ddl)
+	fieldsStr, err2 := getTableFieldsStr(ddl)
+	columns, err3 := parseFields(fieldsStr)
+	if err1 == nil && err2 == nil && err3 == nil {
+		singularName := Singular(table)
+		parsedResult = ParsedResult{
+			PackageName: "",
+			NamespaceName: "",
+			TableName: table,
+			NormalizedTableName: singularName,
+			ObjectName: Pascal(singularName),
+			PascalObjectName: Pascal(singularName),
+			CamelObjectName: Camel(singularName),
+			SnakeObjectName: Snake(singularName),
+			TableComment: tableComment,
+			Columns: columns,
+		}
+		return parsedResult, nil
 	}
-	//及时关闭file句柄
-	defer file.Close()
-	//写入文件时，使用带缓存的 *Writer
-	write := bufio.NewWriter(file)
-	write.WriteString(string(bytes))
-	//Flush将缓存的文件真正写入到文件中
-	write.Flush()
+	return parsedResult, errors.New("fail to parse, please check your ddl file")
 }
 
 // parseTable parse table name and comment for ddl string
-func parseTable(ddl string) ([]string, error) {
+func parseTable(ddl string) (string, string, error) {
 	tableRegexp := regexp.MustCompile(TableNameRegex)
 	if sections := tableRegexp.FindStringSubmatch(ddl); len(sections) > 0 {
 		// value: `s_blog`.`article`
@@ -127,12 +107,10 @@ func parseTable(ddl string) ([]string, error) {
 		} else {
 			tableCommentStr = tableNameStr
 		}
-		return []string{
-			tableNameStr,    // article
-			tableCommentStr, // 文章
-		}, nil
+		// article, 文章, nil
+		return tableNameStr, tableCommentStr, nil
 	}
-	return nil, errors.New("parse ddl error, cannot found a valid table")
+	return "", "", errors.New("parse ddl error, cannot found a valid table")
 }
 
 // parseFields parse table fields
@@ -150,14 +128,11 @@ func parseFields(fieldsStr string) ([]Column, error) {
 	*/
 	var columns []Column
 outerLoop:
-	for index, match := range matches {
+	for _, match := range matches {
 		javaType := ""
 		javaImport := ""
 		goType := ""
 		phpType := ""
-		fmt.Println(index)
-		fmt.Println("-------")
-		fmt.Println(match)
 		// using the first element of matches by example
 		// match[0] value:
 		// `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
