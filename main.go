@@ -1,6 +1,8 @@
 package main
 
-import "ddl-to-object/cmd"
+import (
+	"ddl-to-object/cmd"
+)
 
 func main() {
 	cmd.Execute()
