@@ -7,75 +7,73 @@ const Unsigned = "UNSIGNED"
 
 // integer
 const (
-	TinyIntType = "TINYINT"
-	SmallIntType = "SMALLINT"
-	IntType = "INT"
-	IntegerType = "INTEGER"
-	MediumIntType = "MEDIUMINT"
-	BigIntType = "BIGINT"
+	TinyIntType       = "TINYINT"
+	SmallIntType      = "SMALLINT"
+	IntType           = "INT"
+	IntegerType       = "INTEGER"
+	MediumIntType     = "MEDIUMINT"
+	BigIntType        = "BIGINT"
 	IntegerSeriesType = "TINYINT|SMALLINT|INT|INTEGER|MEDIUMINT|BIGINT"
 )
 
 // float/double/decimal
 const (
-	FloatType = "FLOAT"
-	DoubleType = "DOUBLE"
+	FloatType   = "FLOAT"
+	DoubleType  = "DOUBLE"
 	DecimalType = "DECIMAL"
 )
 
 // date and time
 const (
-	DateType = "DATE"
-	TimeType = "TIME"
-	DateTimeType = "DATETIME"
-	TimestampType = "TIMESTAMP"
-	YearType = "YEAR"
+	DateType              = "DATE"
+	TimeType              = "TIME"
+	DateTimeType          = "DATETIME"
+	TimestampType         = "TIMESTAMP"
+	YearType              = "YEAR"
 	DateAndTimeSeriesType = "DATE|TIME|DATETIME|TIMESTAMP|YEAR"
 )
 
 // char, string and text
 const (
-	CharType = "CHAR"
-	VarCharType = "VARCHAR"
+	CharType       = "CHAR"
+	VarCharType    = "VARCHAR"
 	CharSeriesType = "CHAR|VARCHAR"
 
-	TinyTextType = "TINYTEXT"
-	TextType = "TEXT"
+	TinyTextType   = "TINYTEXT"
+	TextType       = "TEXT"
 	MediumTextType = "MEDIUMTEXT"
-	LongTextType = "LONGTEXT"
+	LongTextType   = "LONGTEXT"
 	TextSeriesType = "TINYTEXT|TEXT|MEDIUMTEXT|LONGTEXT"
 )
 
 // binary
 const (
-	BinaryType = "BINARY"
-	VarBinaryType = "VARBINARY"
+	BinaryType       = "BINARY"
+	VarBinaryType    = "VARBINARY"
 	BinarySeriesType = "BINARY|VARBINARY"
 )
 
 // blob
 const (
-	TypeBlob = "BLOB"
-	TypeTinyBlob = "TINYBLOB"
+	TypeBlob       = "BLOB"
+	TypeTinyBlob   = "TINYBLOB"
 	TypeMediumBlob = "MEDIUMBLOB"
-	TypeLongBlob = "LONGBLOB"
+	TypeLongBlob   = "LONGBLOB"
 	BlobSeriesType = "TINYBLOB|BLOB|MEDIUMBLOB|LONGBLOB"
 )
 
 // others: such as bit/enum/set/json and spatial series type
 const (
-	BitType = "BIT"
-	EnumType = "ENUM"
-	SetType = "SET"
-	JsonType = "JSON"
-	BooleanType = "TINYINT"
-	BoolType = "TINYINT"
+	BitType        = "BIT"
+	EnumType       = "ENUM"
+	SetType        = "SET"
+	JsonType       = "JSON"
+	BooleanType    = "TINYINT"
+	BoolType       = "TINYINT"
 	ExpressionType = "EXPRESSION"
 
 	SpatialSeriesType = "GEOMETRY|POINT|LINESTRING|POLYGON|MULTIPOINT|MULTILINESTRING|MULTIPOLYGON|GEOMETRYCOLLECTION"
 )
-
-
 
 // IsText is text?
 func IsText(dataType string) bool {

@@ -9,14 +9,18 @@ import (
 // ParsedResult the result of ddl after parsed
 type ParsedResult struct {
 	PackageName         string
+	GoPackageName       string
+	JavaPackageName     string
 	NamespaceName       string
+	PhpNamespaceName    string
 	TableName           string
 	NormalizedTableName string
 	ObjectName          string
 	PascalObjectName    string
 	CamelObjectName     string
-	SnakeObjectName		string
+	SnakeObjectName     string
 	TableComment        string
+	JavaRandomLong      string
 	Columns             []Column
 }
 
@@ -33,8 +37,9 @@ type Column struct {
 	JavaImport     string
 	PhpType        string
 	// PythonType       string
-	GoType string
-	GoTag  string
+	GoType   string
+	GoImport string
+	GoTag    string
 }
 
 // AdditionalAttr additional attribute: such as default value, is unsigned, can nullable?
@@ -47,14 +52,12 @@ type AdditionalAttr struct {
 	Nullable        bool
 }
 
-
-
 const (
 	// TableNameRegex \x60 for `
 	TableNameRegex    = `(?im)CREATE\s+TABLE\s+([\x60-zA-Z-_."']+)`
 	TableCommentRegex = `(?im)\).*COMMENT\s+["|'](.*)["|']`
 	// FieldsRegex \x60 for `
-	FieldsRegex = `(?im)([\w\x60"']+)\s+([\w\(\),]+).*(\s+COMMENT\s+["|'](.*)["|'])?`
+	FieldsRegex = `(?im)([\w\x60"']+)\s+([\w]+).*(\s+COMMENT\s+["|'](.*)["|'])?`
 	// ColumnCommentRegex parse column comment
 	ColumnCommentRegex = `(?im)COMMENT\s+['|"](.*)['|"]`
 	NullableValueRegex = `(?im)DEFAULT\s+NULL`
@@ -69,16 +72,20 @@ func Parse(ddl string) (ParsedResult, error) {
 	if err1 == nil && err2 == nil && err3 == nil {
 		singularName := Singular(table)
 		parsedResult = ParsedResult{
-			PackageName: "",
-			NamespaceName: "",
-			TableName: table,
+			PackageName:         "",
+			GoPackageName:       "main",
+			JavaPackageName:     "com.example.sample.domain.entity",
+			NamespaceName:       "",
+			PhpNamespaceName:    "App\\Models",
+			TableName:           table,
 			NormalizedTableName: singularName,
-			ObjectName: Pascal(singularName),
-			PascalObjectName: Pascal(singularName),
-			CamelObjectName: Camel(singularName),
-			SnakeObjectName: Snake(singularName),
-			TableComment: tableComment,
-			Columns: columns,
+			ObjectName:          Pascal(singularName),
+			PascalObjectName:    Pascal(singularName),
+			CamelObjectName:     Camel(singularName),
+			SnakeObjectName:     Snake(singularName),
+			TableComment:        tableComment,
+			JavaRandomLong:      RandomInt64Str(18),
+			Columns:             columns,
 		}
 		return parsedResult, nil
 	}
@@ -132,6 +139,7 @@ outerLoop:
 		javaType := ""
 		javaImport := ""
 		goType := ""
+		goImport := ""
 		phpType := ""
 		// using the first element of matches by example
 		// match[0] value:
@@ -173,7 +181,7 @@ outerLoop:
 			// python ignore
 			//// ...
 			// golang
-			goType, _ = MapToGoType(additionalAttr)
+			goType, goImport = MapToGoType(additionalAttr)
 			snakeName := Snake(columnName)
 			goTag := "`json:\"" + snakeName + "\" db:\"" + columnName + "\"`"
 			column := Column{
@@ -187,9 +195,10 @@ outerLoop:
 				JavaType:       javaType,
 				JavaImport:     javaImport,
 				PhpType:        phpType,
+				GoType:         goType,
+				GoImport:       goImport,
+				GoTag:          goTag,
 				// PythonType:       "",
-				GoType: goType,
-				GoTag:  goTag,
 			}
 			columns = append(columns, column)
 		} else {

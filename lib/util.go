@@ -4,8 +4,11 @@ import (
 	"bufio"
 	"errors"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"text/template"
+	"time"
 )
 
 // PathExists path exists?
@@ -19,7 +22,6 @@ func PathExists(path string) (bool, error) {
 	}
 	return false, err
 }
-
 
 // ReadFile read file as []byte
 func ReadFile(path string) ([]byte, error) {
@@ -74,4 +76,46 @@ func VisitLocationInWriteMode(location string) error {
 		}
 	}
 	return nil
+}
+
+// ReadTemplate read template by target language
+func ReadTemplate(language string) (*template.Template, error) {
+	templatePath := "./template/" + language + ".template"
+	existed, _ := PathExists(templatePath)
+	if !existed {
+		templatePath = "~/.dto/template/" + language + ".template"
+	}
+	tpl, err := template.ParseFiles(templatePath)
+	if err != nil {
+		errors.New("fail to get default template, please check your template files")
+	}
+	return tpl, nil
+}
+
+// RandomStr return random string
+func RandomStr(length int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	bytes := []byte(str)
+	var result []byte
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < length; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	return string(result)
+}
+
+// RandomInt64Str return random string
+func RandomInt64Str(length int) string {
+	if length < 18 {
+		length = 18
+	}
+	str := "0123456789135792468"
+	bytes := []byte(str)
+	var result []byte
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < length; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	// void first letter is 0
+	return "8" + string(result)
 }

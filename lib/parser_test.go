@@ -2,10 +2,9 @@ package lib
 
 import "testing"
 
-
 var exampleTableName = "article"
 var exampleTableComment = "文章"
-var exampleColumns = []string {
+var exampleColumns = []string{
 	"id",
 	"user_id",
 	"content",
@@ -13,22 +12,21 @@ var exampleColumns = []string {
 	"update_time",
 }
 
-var exampleJavaTypeMaps = map[string]string {
-	"id": "Long",
-	"userId": "Long",
-	"content": "String",
+var exampleJavaTypeMaps = map[string]string{
+	"id":         "Long",
+	"userId":     "Long",
+	"content":    "String",
 	"createTime": "Timestamp",
 	"updateTime": "Timestamp",
 }
 
-var exampleGoTypeMaps = map[string]string {
-	"Id": "uint64",
-	"UserId": "int64",
-	"Content": "string",
+var exampleGoTypeMaps = map[string]string{
+	"Id":         "uint64",
+	"UserId":     "int64",
+	"Content":    "string",
 	"CreateTime": "time.Time",
 	"UpdateTime": "time.Time",
 }
-
 
 // example ddl:
 /*
@@ -49,6 +47,7 @@ const Example = "CREATE TABLE `s_blog`.`article` (\n" +
 	"  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',\n" +
 	"  PRIMARY KEY (`id`)\n" +
 	") ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '文章';"
+
 func TestExample(t *testing.T) {
 	result, err := Parse(Example)
 	if err != nil {
