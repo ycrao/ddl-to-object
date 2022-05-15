@@ -1,6 +1,7 @@
 package lib
 
 // see https://github.com/douyasi/common/tree/master/str
+// test see https://github.com/douyasi/common/blob/master/str/case_test.go
 import (
 	"regexp"
 	"strings"
