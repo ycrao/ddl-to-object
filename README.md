@@ -8,12 +8,13 @@
 
 ### language supports
 
->   You can support another language by adding a new template.
+>   PR is welcome! You can do some coding stuff to support another language.
 
-- java: generate entity class with snake_style to camelStyle, comments, and package directory support
+- java: generate entity class with auto snake_style to camelStyle naming in properties, bring comments, using lombok plugin for getter/setter, with package directory support
 - golang: generate to struct with tag and comments
 - php: generate to simple class with namespace and comments support
 - python: generate to simple object with comments support
+- support any other program language?: pull request is welcome
 
 ### best practice
 
