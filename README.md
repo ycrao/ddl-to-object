@@ -1,5 +1,11 @@
 # ddl-to-object
 
+[![GoVersion](https://img.shields.io/github/go-mod/go-version/ycrao/ddl-to-object)](https://github.com/ycrao/ddl-to-object/blob/master/go.mod)
+[![Release](https://img.shields.io/github/v/release/ycrao/ddl-to-object)](https://github.com/ycrao/ddl-to-object/releases)
+![Stars](https://img.shields.io/github/stars/ycrao/ddl-to-object)
+[![MIT license](https://img.shields.io/github/license/ycrao/ddl-to-object)](https://opensource.org/licenses/MIT)
+[![OpenIssue](https://img.shields.io/github/issues/ycrao/ddl-to-object)](https://github.com/ycrao/ddl-to-object/issues?q=is%3Aopen+is%3Aissue)
+
 >   ddl-to-object: a tool help to generate object files in different languages from sql ddl file.
 
 ### database supports
