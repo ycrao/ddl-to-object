@@ -24,7 +24,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&from, "from", "f", "", "from `path` which a single-table DDL file located")
 	rootCmd.PersistentFlags().StringVarP(&ns, "ns", "n", "App\\Models", "`namespace` name for php, only in php command")
 	rootCmd.PersistentFlags().StringVarP(&pk, "pk", "p", "com.example.sample.domain.entity", "`package` name, only in java or go command")
-	rootCmd.PersistentFlags().StringVarP(&to, "to", "t", "", "output to target `path` or location, create directory automatically if it not existed\n\t\t if write file failed, will stdout")
+	rootCmd.PersistentFlags().StringVarP(&to, "to", "t", "", "output to target `path` or location, create directory automatically if it not existed.\nwhen failed to write file, will enable stdout output")
 }
 
 var rootCmd = &cobra.Command{
