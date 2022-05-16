@@ -12,22 +12,22 @@
 
 ### 数据库支持
 
-- 仅针对 MySQL/MariaDB DDL SQL 进行了测试
+- 仅针对 MySQL/MariaDB DDL SQL 进行了测试。
 
 ### 语言支持
 
 >   欢迎 PR ！您可以做一些编码工作来让它支持另一种（编程）语言。
 
-- java: 生成实体类，对属性自动转换（数据库中蛇形 `snake_style` 字段）到驼峰 `camelStyle` 风格，引入注释，并使用 lombok 插件减少 `getter/setter` 等代码、并支持包目录
-- golang: 生成带有标签 `tag` 和注释 `comment` 的结构体
-- php: 生成带有命名空间和注释支持的简单类
-- python: 生成带有注释的简单类
+- java: 生成实体类，对属性自动转换（数据库中蛇形 `snake_style` 字段）到驼峰 `camelStyle` 风格，引入注释，并使用 lombok 插件减少 `getter/setter` 等代码、并支持包目录；
+- golang: 生成带有标签 `tag` 和注释 `comment` 的结构体；
+- php: 生成带有命名空间和注释支持的简单类；
+- python: 生成带有注释的简单类；
 - 想要其它编程语言支持？：`Pull Request` 是欢迎的。
 
 ### 最佳实践
 
 - 在 MySQL DDL 中使用良好的涉及模式，例如使用单数名词作为表名和列名，以蛇形 `snake_case` 样式命名、更多的注释、不要使用表前缀和表有主键等。
-- 剩下地，就是使用这个工具帮你生成目标语言类文件
+- 剩下地，就是使用这个工具帮你生成目标语言类文件。
 
 #### 安装
 
@@ -74,15 +74,14 @@ $ ddl-to-object go -f ./output/sampls/example_3.ddl.txt -p models -t ./output/go
 
 模板是个纯文本，使用到 golang [text/template](https://pkg.go.dev/text/template) ， `ParsedResult` 类型的结构体会被传入。你可以根据自己的能力来修改它们。
 
-
 ### 已知所谓的缺陷
 
-- 在单行 DDL SQL 中不能正常工作
-- 在 DDL SQL 中的使用混杂（命名）风格（如蛇形 `snake_style`、驼峰 `camelStyle`、帕斯卡式 `PascalStyle` 和其他情况）的，不能很好地工作
-- 特殊的表或字段名，如 `365Days_table` 、`1st_field` 和 `biz.error.code.field` 等
-- 某些 MySQL 数据类型可能无法很好地映射成（合适的） Java 或 Golang 数据类型
-- Java 和 Golang 中会有一些未使用的引用（包名），您可以自行清理它们或使用诸如 `gofmt` 之类的工具
-- 缺少一些特殊测试用例
+- 在单行 DDL SQL 中不能正常工作；
+- 在 DDL SQL 中的使用混杂（命名）风格（如蛇形 `snake_style`、驼峰 `camelStyle`、帕斯卡式 `PascalStyle` 和其他情况）的，不能很好地工作；
+- 特殊的表或字段名，如 `365Days_table` 、`1st_field` 和 `biz.error.code.field` 等；
+- 某些 MySQL 数据类型可能无法很好地映射成（合适的） Java 或 Golang 数据类型；
+- Java 和 Golang 中会有一些未使用的引用（包名），您可以自行清理它们或使用诸如 `gofmt` 之类的工具；
+- 缺少一些特殊测试用例。
 
 ### 类似项目及参考
 
