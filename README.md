@@ -6,6 +6,8 @@
 [![MIT license](https://img.shields.io/github/license/ycrao/ddl-to-object)](https://opensource.org/licenses/MIT)
 [![OpenIssue](https://img.shields.io/github/issues/ycrao/ddl-to-object)](https://github.com/ycrao/ddl-to-object/issues?q=is%3Aopen+is%3Aissue)
 
+[SimplifiedChinese README/简体中文读我](./README_zh-CN.md)
+
 >   ddl-to-object: a tool help to generate object files in different languages from sql ddl file.
 
 ### database supports
@@ -17,7 +19,7 @@
 >   PR is welcome! You can do some coding stuff to support another language.
 
 - java: generate entity class with auto snake_style to camelStyle naming in properties, bring comments, using lombok plugin for getter/setter, with package directory support
-- golang: generate to struct with tag and comments
+- golang: generate to struct with tags and comments
 - php: generate to simple class with namespace and comments support
 - python: generate to simple object with comments support
 - support any other program language?: pull request is welcome
@@ -29,7 +31,7 @@
 
 #### installation
 
-Download targeted OS zip file, unzip it, and move the binary file (`ddl-to-object` or `ddl-to-object.exe`) to `usr/bin/` or other auto-load environment path. 
+Download targeted OS zip file, unzip it, and move the binary file (`ddl-to-object` or `ddl-to-object.exe`) to `/usr/local/bin/` or other auto-load environment path. 
 
 By default, you need copy this project template files into to `~/.dto/template` directory manually (note: `~` for current user home workdir).
 
