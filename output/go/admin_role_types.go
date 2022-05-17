@@ -10,6 +10,6 @@ type AdminRole struct {
 	Id uint32 `json:"id" db:"id"`  // id 
 	Name string `json:"name" db:"name"`  // name 
 	Slug string `json:"slug" db:"slug"`  // slug 
-	CreatedAt sql.NullString `json:"created_at" db:"created_at"`  // created_at 
-	UpdatedAt sql.NullString `json:"updated_at" db:"updated_at"`  // updated_at  
+	CreatedAt sql.NullTime `json:"created_at" db:"created_at"`  // created_at 
+	UpdatedAt sql.NullTime `json:"updated_at" db:"updated_at"`  // updated_at  
 }
