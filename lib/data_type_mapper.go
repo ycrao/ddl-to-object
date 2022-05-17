@@ -33,7 +33,7 @@ func MapToGoType(attr AdditionalAttr) (string, string) {
 		}
 	} else if IsDateAndTime(dataType) == true {
 		switch dataType {
-		case DateType, DateTimeType:
+		case DateType, DateTimeType, TimestampType:
 			if nullable {
 				return `sql.NullTime`, `import "database/sql"`
 			}
