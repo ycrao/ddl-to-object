@@ -26,11 +26,11 @@ var goCmd = &cobra.Command{
 		}
 		toDir := "./"
 		if to != "" {
-			err := lib.VisitLocationInWriteMode(to)
+			toDir = strings.TrimRight(to, "/") + "/"
+			err := lib.VisitLocationInWriteMode(toDir)
 			if err != nil {
-				panic(err)
+				fmt.Errorf(err.Error())
 			}
-			toDir = to
 		}
 		if from != "" {
 			content, _ := lib.ReadFile(from)

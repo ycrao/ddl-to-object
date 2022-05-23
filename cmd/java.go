@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	"strings"
 )
 
 func init() {
@@ -22,11 +23,11 @@ var javaCmd = &cobra.Command{
 		}
 		toDir := "./"
 		if to != "" {
-			err := lib.VisitLocationInWriteMode(to)
+			toDir = strings.TrimRight(to, "/") + "/"
+			err := lib.VisitLocationInWriteMode(toDir)
 			if err != nil {
 				fmt.Errorf(err.Error())
 			}
-			toDir = to
 		}
 		if from != "" {
 			content, _ := lib.ReadFile(from)
