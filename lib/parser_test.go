@@ -66,12 +66,12 @@ func TestExample(t *testing.T) {
 		goType := column.GoType
 		goProperty := column.PascalName
 		if exampleGoTypeMaps[goProperty] != goType {
-			t.Errorf("golang type for %s property should be %s, but got %s", goProperty, exampleGoTypeMaps[goProperty], goType)
+			t.Errorf("data type in golang for %s property should be %s, but got %s", goProperty, exampleGoTypeMaps[goProperty], goType)
 		}
 		javaType := column.JavaType
 		javaProperty := column.CamelName
 		if exampleJavaTypeMaps[javaProperty] != javaType {
-			t.Errorf("golang type for %s property should be %s, but got %s", javaProperty, exampleJavaTypeMaps[javaProperty], javaType)
+			t.Errorf("data type in java for %s property should be %s, but got %s", javaProperty, exampleJavaTypeMaps[javaProperty], javaType)
 		}
 	}
 }
