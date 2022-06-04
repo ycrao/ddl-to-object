@@ -13,6 +13,6 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number of ddl-to-object",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ddl-to-object <dto> v1.0")
+		fmt.Println("ddl-to-object <dto> v1.1.2")
 	},
 }
