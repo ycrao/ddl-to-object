@@ -107,7 +107,8 @@ func parseTable(ddl string) (string, string, error) {
 		}
 		tableCommentStr := ""
 		tableCommentRegexp := regexp.MustCompile(TableCommentRegex)
-		if results := tableCommentRegexp.FindStringSubmatch(ddl); len(results) > 0 {
+		optionStr, _ := getTableOptionStr(ddl)
+		if results := tableCommentRegexp.FindStringSubmatch(optionStr); len(results) > 0 {
 			// value: '文章'
 			oriTableCommentStr := results[1]
 			tableCommentStr = normalizedName(oriTableCommentStr)
@@ -216,12 +217,21 @@ func normalizedName(name string) string {
 	return name
 }
 
-// getTableFieldsStr get table fields str cut off ( and )
+// getTableFieldsStr get table fields str cut off
 func getTableFieldsStr(ddl string) (string, error) {
 	openedBracketIndex := strings.IndexAny(ddl, `(`)
 	closedBracketIndex := strings.LastIndexAny(ddl, `)`)
 	if openedBracketIndex != -1 && closedBracketIndex != -1 {
 		return ddl[(openedBracketIndex + 1):closedBracketIndex], nil
+	}
+	return "", errors.New("not a valid ddl string")
+}
+
+// getTableOptionStr get table option str cut off
+func getTableOptionStr(ddl string) (string, error) {
+	closedBracketIndex := strings.LastIndexAny(ddl, `)`)
+	if closedBracketIndex != -1 {
+		return ddl[(closedBracketIndex + 1):], nil
 	}
 	return "", errors.New("not a valid ddl string")
 }

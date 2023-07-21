@@ -6,6 +6,7 @@ var exampleTableName = "article"
 var exampleTableComment = "文章"
 var exampleColumns = []string{
 	"id",
+	"title",
 	"user_id",
 	"content",
 	"create_time",
@@ -14,6 +15,7 @@ var exampleColumns = []string{
 
 var exampleJavaTypeMaps = map[string]string{
 	"id":         "Long",
+	"title":      "String",
 	"userId":     "Long",
 	"content":    "String",
 	"createTime": "Timestamp",
@@ -22,6 +24,7 @@ var exampleJavaTypeMaps = map[string]string{
 
 var exampleGoTypeMaps = map[string]string{
 	"Id":         "uint64",
+	"Title":      "string",
 	"UserId":     "int64",
 	"Content":    "string",
 	"CreateTime": "time.Time",
@@ -32,6 +35,7 @@ var exampleGoTypeMaps = map[string]string{
 /*
 CREATE TABLE `s_blog`.`article` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` varchar(512) NOT NULL COMMENT '文章标题',
   `user_id` bigint NOT NULL COMMENT '用户id',
   `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '正文',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -41,6 +45,7 @@ CREATE TABLE `s_blog`.`article` (
 */
 const Example = "CREATE TABLE `s_blog`.`article` (\n" +
 	"  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',\n" +
+	"  `title` varchar(512) NOT NULL COMMENT '文章标题',\n" +
 	"  `user_id` bigint NOT NULL COMMENT '用户id',\n" +
 	"  `content` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '正文',\n" +
 	"  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n" +
