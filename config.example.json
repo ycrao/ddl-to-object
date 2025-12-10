@@ -1,0 +1,15 @@
+{
+  "default_packages": {
+    "go": "models",
+    "java": "com.yourcompany.domain.entity",
+    "php": "App\\Models",
+    "python": ""
+  },
+  "template_dir": "~/.dto/template",
+  "log_level": "info",
+  "output_settings": {
+    "create_directories": true,
+    "overwrite_files": true,
+    "backup_existing": false
+  }
+}

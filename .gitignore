@@ -21,3 +21,7 @@ ddl-to-object.exe
 .DS_Store
 
 release/
+bin/
+*.log
+.vscode/
+*.tmp

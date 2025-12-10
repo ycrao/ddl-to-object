@@ -2,6 +2,7 @@ package lib
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -65,31 +66,48 @@ const (
 
 // Parse parse MySQL DDL
 func Parse(ddl string) (ParsedResult, error) {
+	if strings.TrimSpace(ddl) == "" {
+		return ParsedResult{}, errors.New("DDL content is empty")
+	}
+
 	var parsedResult ParsedResult
 	table, tableComment, err1 := parseTable(ddl)
-	fieldsStr, err2 := getTableFieldsStr(ddl)
-	columns, err3 := parseFields(fieldsStr)
-	if err1 == nil && err2 == nil && err3 == nil {
-		singularName := Singular(table)
-		parsedResult = ParsedResult{
-			PackageName:         "",
-			GoPackageName:       "main",
-			JavaPackageName:     "com.example.sample.domain.entity",
-			NamespaceName:       "",
-			PhpNamespaceName:    "App\\Models",
-			TableName:           table,
-			NormalizedTableName: singularName,
-			ObjectName:          Pascal(singularName),
-			PascalObjectName:    Pascal(singularName),
-			CamelObjectName:     Camel(singularName),
-			SnakeObjectName:     Snake(singularName),
-			TableComment:        tableComment,
-			JavaRandomLong:      RandomInt64Str(18),
-			Columns:             columns,
-		}
-		return parsedResult, nil
+	if err1 != nil {
+		return parsedResult, fmt.Errorf("failed to parse table: %w", err1)
 	}
-	return parsedResult, errors.New("fail to parse, please check your ddl file")
+
+	fieldsStr, err2 := getTableFieldsStr(ddl)
+	if err2 != nil {
+		return parsedResult, fmt.Errorf("failed to extract table fields: %w", err2)
+	}
+
+	columns, err3 := parseFields(fieldsStr)
+	if err3 != nil {
+		return parsedResult, fmt.Errorf("failed to parse fields: %w", err3)
+	}
+
+	if len(columns) == 0 {
+		return parsedResult, errors.New("no valid columns found in DDL")
+	}
+
+	singularName := Singular(table)
+	parsedResult = ParsedResult{
+		PackageName:         "",
+		GoPackageName:       "main",
+		JavaPackageName:     "com.example.sample.domain.entity",
+		NamespaceName:       "",
+		PhpNamespaceName:    "App\\Models",
+		TableName:           table,
+		NormalizedTableName: singularName,
+		ObjectName:          Pascal(singularName),
+		PascalObjectName:    Pascal(singularName),
+		CamelObjectName:     Camel(singularName),
+		SnakeObjectName:     Snake(singularName),
+		TableComment:        tableComment,
+		JavaRandomLong:      RandomInt64Str(18),
+		Columns:             columns,
+	}
+	return parsedResult, nil
 }
 
 // parseTable parse table name and comment for ddl string
