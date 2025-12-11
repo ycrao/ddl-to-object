@@ -22,6 +22,12 @@ ddl-to-object.exe
 
 release/
 bin/
+dist/
 *.log
 .vscode/
 *.tmp
+
+# Package files
+*.tar.gz
+*.zip
+checksums.*

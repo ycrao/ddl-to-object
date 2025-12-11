@@ -1,6 +1,6 @@
 module ddl-to-object
 
-go 1.21
+go 1.25
 
 require (
 	github.com/jinzhu/inflection v1.0.0

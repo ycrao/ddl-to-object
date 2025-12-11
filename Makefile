@@ -59,3 +59,16 @@ build-all: clean
 	cp -r config.example.json release/mac/config.json
 	cp -r config.example.json release/mac-arm64/config.json
 	cp -r config.example.json release/win/config.json
+	@echo "Build completed for all platforms"
+
+# Simple package (with version)
+package: build-all
+	@echo "Simple packaging..."
+	@chmod +x advanced-package.sh
+	@./advanced-package.sh -v $(VERSION) -c
+
+# Development workflow
+dev: fmt vet test build
+
+# Release workflow
+release: clean build-all package
