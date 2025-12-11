@@ -9,7 +9,7 @@ import (
 
 var (
 	// Version information (set by build flags)
-	Version   = "v2.0.1"
+	Version   = "v2.0.2"
 	GitCommit = "unknown"
 	BuildTime = "unknown"
 )
