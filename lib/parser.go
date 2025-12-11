@@ -56,7 +56,7 @@ type AdditionalAttr struct {
 const (
 	// TableNameRegex \x60 for `
 	TableNameRegex    = `(?im)CREATE\s+TABLE\s+([\x60-zA-Z-_."']+)`
-	TableCommentRegex = `(?im).*COMMENT=["|'](.*)["|']`
+	TableCommentRegex = `(?im).*COMMENT\s+["|'](.*)["|']`
 	// FieldsRegex \x60 for `
 	FieldsRegex = `(?im)([\w\x60"']+)\s+([\w]+).*(\s+COMMENT\s+["|'](.*)["|'])?`
 	// ColumnCommentRegex parse column comment
@@ -72,6 +72,7 @@ func Parse(ddl string) (ParsedResult, error) {
 
 	var parsedResult ParsedResult
 	table, tableComment, err1 := parseTable(ddl)
+
 	if err1 != nil {
 		return parsedResult, fmt.Errorf("failed to parse table: %w", err1)
 	}

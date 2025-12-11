@@ -78,7 +78,7 @@ func handleConvert(w http.ResponseWriter, r *http.Request) {
 		"php":    true,
 		"python": true,
 	}
-	
+
 	if !allowedLanguages[req.Language] {
 		sendErrorResponse(w, "Unsupported language")
 		return
@@ -91,9 +91,9 @@ func handleConvert(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// 简单的包名验证
-		if strings.Contains(req.Package, "..") || 
-		   strings.Contains(req.Package, "/") ||
-		   strings.Contains(req.Package, "\\") {
+		if strings.Contains(req.Package, "..") ||
+			strings.Contains(req.Package, "/") ||
+			strings.Contains(req.Package, "\\") {
 			sendErrorResponse(w, "Invalid package name")
 			return
 		}
@@ -145,7 +145,7 @@ func handleConvert(w http.ResponseWriter, r *http.Request) {
 func generateCode(result lib.ParsedResult, language string) (string, error) {
 	// 查找模板文件
 	templatePath := fmt.Sprintf("../template/%s.template", language)
-	
+
 	// 如果本地模板不存在，尝试用户目录
 	if _, err := os.Stat(templatePath); os.IsNotExist(err) {
 		homeDir, _ := os.UserHomeDir()
@@ -181,24 +181,24 @@ func sendErrorResponse(w http.ResponseWriter, message string) {
 func handleStatic(w http.ResponseWriter, r *http.Request) {
 	// 获取请求路径
 	requestPath := r.URL.Path
-	
+
 	// 根路径重定向到 index.html
 	if requestPath == "/" {
 		requestPath = "/index.html"
 	}
-	
+
 	// 移除开头的斜杠
 	requestPath = strings.TrimPrefix(requestPath, "/")
-	
+
 	// 严格的安全检查
-	if strings.Contains(requestPath, "..") || 
-	   strings.Contains(requestPath, "\\") ||
-	   strings.HasPrefix(requestPath, "/") ||
-	   strings.Contains(requestPath, "~") {
+	if strings.Contains(requestPath, "..") ||
+		strings.Contains(requestPath, "\\") ||
+		strings.HasPrefix(requestPath, "/") ||
+		strings.Contains(requestPath, "~") {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
-	
+
 	// 只允许特定的文件
 	allowedFiles := map[string]bool{
 		"index.html":  true,
@@ -207,39 +207,39 @@ func handleStatic(w http.ResponseWriter, r *http.Request) {
 		"robots.txt":  true, // SEO robots
 		"favicon.ico": true, // 允许网站图标
 	}
-	
+
 	if !allowedFiles[requestPath] {
 		http.Error(w, "Not Found", http.StatusNotFound)
 		return
 	}
-	
+
 	// 构建安全的文件路径
 	safePath := filepath.Join(".", requestPath)
-	
+
 	// 再次验证路径是否在当前目录内
 	absPath, err := filepath.Abs(safePath)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	currentDir, err := filepath.Abs(".")
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	if !strings.HasPrefix(absPath, currentDir) {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
-	
+
 	// 检查文件是否存在
 	if _, err := os.Stat(safePath); os.IsNotExist(err) {
 		http.Error(w, "Not Found", http.StatusNotFound)
 		return
 	}
-	
+
 	// 设置内容类型
 	if strings.HasSuffix(requestPath, ".html") {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -248,12 +248,12 @@ func handleStatic(w http.ResponseWriter, r *http.Request) {
 	} else if strings.HasSuffix(requestPath, ".css") {
 		w.Header().Set("Content-Type", "text/css")
 	}
-	
+
 	// 设置安全头
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Header().Set("X-Frame-Options", "DENY")
 	w.Header().Set("X-XSS-Protection", "1; mode=block")
-	
+
 	// 提供文件
 	http.ServeFile(w, r, safePath)
 }
@@ -262,7 +262,7 @@ func handleStatic(w http.ResponseWriter, r *http.Request) {
 func handleHealth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
-		"status": "ok",
+		"status":  "ok",
 		"service": "ddl-to-object-web",
 	})
 }
@@ -272,14 +272,14 @@ func securityMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// 记录请求
 		log.Printf("%s %s %s", r.Method, r.URL.Path, r.RemoteAddr)
-		
+
 		// 设置通用安全头
 		w.Header().Set("Server", "ddl-to-object-web")
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "DENY")
 		w.Header().Set("X-XSS-Protection", "1; mode=block")
 		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
-		
+
 		// 调用下一个处理器
 		next(w, r)
 	}

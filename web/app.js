@@ -81,7 +81,7 @@ const exampleDDL = {
   PRIMARY KEY (\`id\`),
   UNIQUE KEY \`uk_username\` (\`username\`),
   UNIQUE KEY \`uk_email\` (\`email\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';`,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '用户表';`,
     en: `CREATE TABLE \`users\` (
   \`id\` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'User ID',
   \`username\` varchar(50) NOT NULL COMMENT 'Username',
@@ -95,7 +95,7 @@ const exampleDDL = {
   PRIMARY KEY (\`id\`),
   UNIQUE KEY \`uk_username\` (\`username\`),
   UNIQUE KEY \`uk_email\` (\`email\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Users table';`
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT 'Users table';`
 };
 
 // 切换语言
