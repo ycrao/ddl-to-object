@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">DDL to Object - 在线转换工具</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .ddl-input {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .ddl-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .language-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .language-option {
+            position: relative;
+        }
+
+        .language-option input[type="radio"] {
+            display: none;
+        }
+
+        .language-option label {
+            display: block;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .language-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .language-option label:hover {
+            border-color: #4facfe;
+            transform: translateY(-1px);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output-section {
+            margin-top: 30px;
+        }
+
+        .output-code {
+            width: 100%;
+            height: 400px;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background: #f8f9fa;
+            resize: vertical;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .example-link {
+            color: #4facfe;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .example-link:hover {
+            color: #2196F3;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4facfe;
+            font-weight: 600;
+        }
+
+        .highlight-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .highlight-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .highlight-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .highlight-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .highlight-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .highlight-slider {
+            background-color: #4facfe;
+        }
+
+        input:checked + .highlight-slider:before {
+            transform: translateX(26px);
+        }
+
+        .code-container {
+            position: relative;
+        }
+
+        .code-display {
+            display: none;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            background: #f8f9fa;
+            max-height: 300px;
+            overflow: auto;
+            font-size: 14px;
+        }
+
+        .code-display.active {
+            display: block;
+        }
+
+        .output-code-display {
+            display: none;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            background: #f8f9fa;
+            max-height: 400px;
+            overflow: auto;
+            font-size: 14px;
+        }
+
+        .output-code-display.active {
+            display: block;
+        }
+
+
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .language-toggle {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="switchLanguage('zh')" data-lang="zh">中文</button>
+                <button class="lang-btn" onclick="switchLanguage('en')" data-lang="en">English</button>
+            </div>
+            <h1 data-i18n="title">DDL to Object</h1>
+            <p data-i18n="subtitle">将 MySQL DDL 转换为各种编程语言的对象结构</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-group">
+                <div class="highlight-toggle">
+                    <label for="ddl-input" data-i18n="ddl-label">MySQL DDL 语句:</label>
+                    <label class="highlight-switch">
+                        <input type="checkbox" id="ddl-highlight-toggle" onchange="toggleDDLHighlight()">
+                        <span class="highlight-slider"></span>
+                    </label>
+                    <span data-i18n="syntax-highlight">语法高亮</span>
+                </div>
+                <div class="code-container">
+                    <textarea 
+                        id="ddl-input" 
+                        class="ddl-input" 
+                        data-i18n-placeholder="ddl-placeholder"
+                        placeholder="请粘贴您的 MySQL CREATE TABLE 语句...&#10;&#10;例如:&#10;CREATE TABLE `users` (&#10;  `id` bigint unsigned NOT NULL AUTO_INCREMENT,&#10;  `name` varchar(255) NOT NULL,&#10;  `email` varchar(255) NOT NULL,&#10;  `created_at` timestamp NULL DEFAULT NULL,&#10;  PRIMARY KEY (`id`)&#10;) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+                        oninput="updateDDLHighlight()"
+                    ></textarea>
+                    <div id="ddl-display" class="code-display highlighted-code"></div>
+                </div>
+                <span class="example-link" onclick="loadExample()" data-i18n="load-example">加载示例 DDL</span>
+            </div>
+            
+            <div class="form-group">
+                <label data-i18n="select-language">选择目标语言:</label>
+                <div class="language-selector">
+                    <div class="language-option">
+                        <input type="radio" id="lang-go" name="language" value="go" checked>
+                        <label for="lang-go">
+                            <strong>Go</strong><br>
+                            <small data-i18n="go-desc">生成 struct 结构体</small>
+                        </label>
+                    </div>
+                    <div class="language-option">
+                        <input type="radio" id="lang-java" name="language" value="java">
+                        <label for="lang-java">
+                            <strong>Java</strong><br>
+                            <small data-i18n="java-desc">生成 Entity 类</small>
+                        </label>
+                    </div>
+                    <div class="language-option">
+                        <input type="radio" id="lang-php" name="language" value="php">
+                        <label for="lang-php">
+                            <strong>PHP</strong><br>
+                            <small data-i18n="php-desc">生成 Model 类</small>
+                        </label>
+                    </div>
+                    <div class="language-option">
+                        <input type="radio" id="lang-python" name="language" value="python">
+                        <label for="lang-python">
+                            <strong>Python</strong><br>
+                            <small data-i18n="python-desc">生成 Class 类</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateCode()" data-i18n="generate-btn">
+                🚀 生成代码
+            </button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p data-i18n="generating">正在生成代码...</p>
+            </div>
+            
+            <div class="output-section" id="output-section" style="display: none;">
+                <div class="highlight-toggle">
+                    <label for="output-code" data-i18n="output-label">生成的代码:</label>
+                    <label class="highlight-switch">
+                        <input type="checkbox" id="output-highlight-toggle" onchange="toggleOutputHighlight()" checked>
+                        <span class="highlight-slider"></span>
+                    </label>
+                    <span data-i18n="syntax-highlight">语法高亮</span>
+                </div>
+                <div class="code-container">
+                    <textarea id="output-code" class="output-code" readonly style="display: none;"></textarea>
+                    <div id="output-display" class="output-code-display highlighted-code active"></div>
+                </div>
+                <button class="copy-btn" onclick="copyToClipboard()" data-i18n="copy-btn">📋 复制代码</button>
+            </div>
+            
+            <div id="error-message" class="error-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="app.js"></script>
+</body>
+</html>
