@@ -21,3 +21,13 @@ ddl-to-object.exe
 .DS_Store
 
 release/
+bin/
+dist/
+*.log
+.vscode/
+*.tmp
+
+# Package files
+*.tar.gz
+*.zip
+checksums.*

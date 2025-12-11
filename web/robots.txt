@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Allow: /?lang=en
+Allow: /?lang=zh

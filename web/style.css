@@ -1,0 +1,160 @@
+/* Additional styles for DDL to Object Web App */
+
+/* Security notice */
+.security-notice {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    color: #1976d2;
+}
+
+/* Loading animation improvements */
+.loading {
+    background: rgba(255, 255, 255, 0.9);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Error message improvements */
+.error-message {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Success message */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px solid #c3e6cb;
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Code output improvements */
+.output-code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    line-height: 1.5;
+    tab-size: 4;
+}
+
+/* Syntax highlighting improvements */
+.highlighted-code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    line-height: 1.5;
+    tab-size: 4;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 15px;
+    overflow: auto;
+    white-space: pre;
+    background: #f8f9fa;
+}
+
+/* Override highlight.js styles to match our design */
+.highlighted-code .hljs {
+    background: transparent !important;
+    padding: 0 !important;
+    font-family: inherit !important;
+    line-height: inherit !important;
+}
+
+.code-container {
+    position: relative;
+}
+
+.code-display, .output-code-display {
+    min-height: 100px;
+    max-height: 400px;
+    font-size: 14px;
+}
+
+/* Highlight toggle styles */
+.highlight-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.highlight-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.highlight-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.highlight-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.highlight-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .highlight-slider {
+    background-color: #4facfe;
+}
+
+input:checked + .highlight-slider:before {
+    transform: translateX(26px);
+}
+
+/* Responsive improvements */
+@media (max-width: 480px) {
+    .language-selector {
+        grid-template-columns: 1fr;
+    }
+    
+    .header h1 {
+        font-size: 1.8em;
+    }
+    
+    .main-content {
+        padding: 15px;
+    }
+}

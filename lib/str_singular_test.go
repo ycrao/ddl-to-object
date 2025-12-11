@@ -26,7 +26,7 @@ var inflections = map[string]string{
 	"analyses":     "analysis",
 	"children":     "child",
 	"news":         "news",
-	// should failed but passed? as merchandise/product meaning, it have no singular case, should be `goods`
+	// should fail but passed? as merchandise/product meaning, it has no singular case, should be `goods`
 	"goods":   "good",
 	"queries": "query",
 	"heroes":  "hero",
@@ -36,7 +36,7 @@ var inflections = map[string]string{
 	"leaves":      "leaf",
 	"sheep":       "sheep",
 	"information": "information",
-	// error word: `informations` - information is a uncountable noun
+	// error word: `informations` - information is an uncountable noun
 	"informations": "information",
 }
 

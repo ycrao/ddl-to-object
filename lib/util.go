@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"github.com/mitchellh/go-homedir"
+	"io"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -42,28 +43,30 @@ func ReadFile(path string) ([]byte, error) {
 
 // WriteBytesToFile write bytes content to file
 func WriteBytesToFile(filePath string, content []byte) error {
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 	writer := bufio.NewWriter(file)
-	writer.Write(content)
-	writer.Flush()
-	return nil
+	if _, err := writer.Write(content); err != nil {
+		return err
+	}
+	return writer.Flush()
 }
 
 // WriteStringToFile write string content to file
 func WriteStringToFile(filePath string, content string) error {
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 	writer := bufio.NewWriter(file)
-	writer.WriteString(content)
-	writer.Flush()
-	return nil
+	if _, err := writer.WriteString(content); err != nil {
+		return err
+	}
+	return writer.Flush()
 }
 
 // VisitLocationInWriteMode when directory not existed, will create it
@@ -85,11 +88,15 @@ func ReadTemplate(language string) (*template.Template, error) {
 	existed, _ := PathExists(templatePath)
 	if !existed {
 		homeTemplatePath := "~/.dto/template/" + language + ".template"
-		templatePath, _ = homedir.Expand(homeTemplatePath)
+		var err error
+		templatePath, err = homedir.Expand(homeTemplatePath)
+		if err != nil {
+			return nil, err
+		}
 	}
 	tpl, err := template.ParseFiles(templatePath)
 	if err != nil {
-		errors.New("fail to get default template, please check your template files")
+		return nil, errors.New("fail to get default template, please check your template files: " + err.Error())
 	}
 	return tpl, nil
 }
@@ -120,4 +127,26 @@ func RandomInt64Str(length int) string {
 	}
 	// void first letter is 0
 	return "8" + string(result)
+}
+
+// CopyFile copies a file from src to dst
+func CopyFile(src, dst string) error {
+	sourceFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	destFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
+
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		return err
+	}
+
+	return destFile.Sync()
 }

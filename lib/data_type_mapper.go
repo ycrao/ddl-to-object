@@ -1,57 +1,88 @@
 package lib
 
+import (
+	"fmt"
+	"strings"
+)
+
 // MapToGoType map mysql data type to golang data type
 func MapToGoType(attr AdditionalAttr) (string, string) {
 	dataType := attr.DataType
 	nullable := attr.Nullable
-	if IsInteger(dataType) == true {
+
+	// Handle nullable types with proper Go types
+	if IsInteger(dataType) {
 		isUnsigned := attr.IsUnsigned
 		prefix := ""
 		if isUnsigned {
 			prefix = "u"
 		}
+
+		var baseType string
 		switch dataType {
 		case TinyIntType:
-			return prefix + "int8", ""
+			baseType = prefix + "int8"
 		case SmallIntType:
-			return prefix + "int16", ""
+			baseType = prefix + "int16"
 		case IntegerType, IntType:
-			return prefix + "int32", ""
+			baseType = prefix + "int32"
 		case MediumIntType, BigIntType:
-			return prefix + "int64", ""
+			baseType = prefix + "int64"
 		default:
-			return prefix + "int64", ""
+			baseType = prefix + "int64"
 		}
-	} else if IsHighPrecisionNumber(dataType) == true {
+
+		if nullable {
+			return fmt.Sprintf("sql.Null%s", strings.Title(baseType)), `import "database/sql"`
+		}
+		return baseType, ""
+
+	} else if IsHighPrecisionNumber(dataType) {
+		var baseType string
 		switch dataType {
 		case FloatType:
-			return "float32", ""
+			baseType = "float32"
 		case DoubleType, DecimalType:
-			return "float64", ""
+			baseType = "float64"
 		default:
-			return "float64", ""
+			baseType = "float64"
 		}
-	} else if IsDateAndTime(dataType) == true {
+
+		if nullable {
+			return fmt.Sprintf("sql.Null%s", strings.Title(baseType)), `import "database/sql"`
+		}
+		return baseType, ""
+
+	} else if IsDateAndTime(dataType) {
 		switch dataType {
 		case DateType, DateTimeType, TimestampType:
 			if nullable {
 				return `sql.NullTime`, `import "database/sql"`
 			}
 			return `time.Time`, `import "time"`
+		case TimeType:
+			if nullable {
+				return `sql.NullString`, `import "database/sql"`
+			}
+			return "string", ""
 		default:
 			if nullable {
 				return `sql.NullString`, `import "database/sql"`
 			}
 			return "string", ""
 		}
-	} else if CanCastAsString(dataType) == true {
+	} else if dataType == JsonType {
+		return "json.RawMessage", `import "encoding/json"`
+	} else if IsBlob(dataType) || IsBinary(dataType) {
+		return "[]byte", ""
+	} else if CanCastAsString(dataType) {
 		if nullable {
 			return `sql.NullString`, `import "database/sql"`
 		}
 		return "string", ""
-	} else if IsBlob(dataType) || IsBinary(dataType) {
-		return "[]byte", ""
 	}
+
+	// Fallback for unknown types
 	return "interface{}", ""
 }
 

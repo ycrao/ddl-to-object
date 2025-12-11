@@ -17,14 +17,23 @@ var (
 	pk string
 	// --to/-t: output to a directory, if directory not existed will create
 	to string
+	// --verbose/-v: enable verbose output
+	verbose bool
+	// --config/-c: config file path
+	configFile string
+	// --dry-run: show what would be generated without creating files
+	dryRun bool
 )
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&stdout, "stdout", "s", false, "enable stdout or not, default set false to disable")
 	rootCmd.PersistentFlags().StringVarP(&from, "from", "f", "", "from `path` which a single-table DDL file located")
-	rootCmd.PersistentFlags().StringVarP(&ns, "ns", "n", "App\\Models", "`namespace` name for php, only in php command")
-	rootCmd.PersistentFlags().StringVarP(&pk, "pk", "p", "com.example.sample.domain.entity", "`package` name, only in java or go command")
-	rootCmd.PersistentFlags().StringVarP(&to, "to", "t", "", "output to target `path` or location, create directory automatically if it not existed.\nwhen failed to write file, will enable stdout output")
+	rootCmd.PersistentFlags().StringVarP(&ns, "ns", "n", "", "`namespace` name for php, only in php command (default: App\\Models)")
+	rootCmd.PersistentFlags().StringVarP(&pk, "pk", "p", "", "`package` name, only in java or go command (default: com.example.sample.domain.entity)")
+	rootCmd.PersistentFlags().StringVarP(&to, "to", "t", "", "output to target `path` or location, create directory automatically if it not existed")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "enable verbose output")
+	rootCmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "config file path (default: ~/.dto/config.json)")
+	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "show what would be generated without creating files")
 }
 
 var rootCmd = &cobra.Command{

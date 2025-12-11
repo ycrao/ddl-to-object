@@ -1,11 +1,9 @@
 package cmd
 
 import (
-	"ddl-to-object/lib"
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
-	"strings"
 )
 
 func init() {
@@ -14,36 +12,17 @@ func init() {
 
 var pythonCmd = &cobra.Command{
 	Use:   "python",
-	Short: "generate python target object file",
+	Short: "Generate python target object file",
 	Run: func(cmd *cobra.Command, args []string) {
-		toDir := "./"
-		if to != "" {
-			toDir = strings.TrimRight(to, "/") + "/"
-			err := lib.VisitLocationInWriteMode(toDir)
-			if err != nil {
-				fmt.Errorf(err.Error())
-			}
+		config := CommandConfig{
+			Language:       "python",
+			DefaultPackage: "",
+			FileExtension:  ".py",
 		}
-		if from != "" {
-			content, _ := lib.ReadFile(from)
-			result, err := lib.Parse(string(content))
-			if err != nil {
-				fmt.Errorf(err.Error())
-				os.Exit(0)
-			}
-			targetFile := toDir + result.SnakeObjectName + ".py"
-			tpl, err := lib.ReadTemplate("python")
-			if err != nil {
-				fmt.Errorf(err.Error())
-			}
-			file, err := os.Create(targetFile)
-			if stdout {
-				tpl.Execute(os.Stdout, result)
-			}
-			if err != nil && !stdout {
-				tpl.Execute(os.Stdout, result)
-			}
-			tpl.Execute(file, result)
+
+		if err := ExecuteLanguageCommand(config); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
 		}
 	},
 }
