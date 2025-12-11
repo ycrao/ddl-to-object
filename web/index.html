@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="page-title">DDL to Object - 在线转换工具</title>
-    <link rel="stylesheet" href="style.css">
+    <title data-i18n="page-title">DDL to Object - Online Conversion Tool</title>
+    <meta name="description" data-i18n="meta-description" content="Convert MySQL DDL statements to object structures in Go, Java, PHP, and Python. Free online tool with syntax highlighting and bilingual support.">
+    <meta name="keywords" content="DDL, MySQL, Go, Java, PHP, Python, struct, entity, model, class, converter, online tool">
+    <meta name="author" content="DDL to Object">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://d2o.gh.1206168.xyz/">
+    <meta property="og:title" data-i18n="og-title" content="DDL to Object - Online Conversion Tool">
+    <meta property="og:description" data-i18n="og-description" content="Convert MySQL DDL statements to object structures in Go, Java, PHP, and Python. Free online tool with syntax highlighting.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://d2o.gh.1206168.xyz/">
+    <meta property="twitter:title" data-i18n="twitter-title" content="DDL to Object - Online Conversion Tool">
+    <meta property="twitter:description" data-i18n="twitter-description" content="Convert MySQL DDL statements to object structures in Go, Java, PHP, and Python.">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://d2o.gh.1206168.xyz/">
+    
+    <!-- Language alternates -->
+    <link rel="alternate" hreflang="en" href="https://d2o.gh.1206168.xyz/?lang=en">
+    <link rel="alternate" hreflang="zh" href="https://d2o.gh.1206168.xyz/?lang=zh">
+    <link rel="alternate" hreflang="x-default" href="https://d2o.gh.1206168.xyz/">
+    
+    <link rel="stylesheet" href="./style.css">
     <style>
         * {
             margin: 0;
@@ -364,93 +389,93 @@
     <div class="container">
         <div class="header">
             <div class="language-toggle">
-                <button class="lang-btn active" onclick="switchLanguage('zh')" data-lang="zh">中文</button>
-                <button class="lang-btn" onclick="switchLanguage('en')" data-lang="en">English</button>
+                <button class="lang-btn" onclick="switchLanguage('zh')" data-lang="zh">中文</button>
+                <button class="lang-btn active" onclick="switchLanguage('en')" data-lang="en">English</button>
             </div>
             <h1 data-i18n="title">DDL to Object</h1>
-            <p data-i18n="subtitle">将 MySQL DDL 转换为各种编程语言的对象结构</p>
+            <p data-i18n="subtitle">Convert MySQL DDL to object structures in various programming languages</p>
         </div>
         
         <div class="main-content">
             <div class="form-group">
                 <div class="highlight-toggle">
-                    <label for="ddl-input" data-i18n="ddl-label">MySQL DDL 语句:</label>
+                    <label for="ddl-input" data-i18n="ddl-label">MySQL DDL Statement:</label>
                     <label class="highlight-switch">
                         <input type="checkbox" id="ddl-highlight-toggle" onchange="toggleDDLHighlight()">
                         <span class="highlight-slider"></span>
                     </label>
-                    <span data-i18n="syntax-highlight">语法高亮</span>
+                    <span data-i18n="syntax-highlight">Syntax Highlight</span>
                 </div>
                 <div class="code-container">
                     <textarea 
                         id="ddl-input" 
                         class="ddl-input" 
                         data-i18n-placeholder="ddl-placeholder"
-                        placeholder="请粘贴您的 MySQL CREATE TABLE 语句...&#10;&#10;例如:&#10;CREATE TABLE `users` (&#10;  `id` bigint unsigned NOT NULL AUTO_INCREMENT,&#10;  `name` varchar(255) NOT NULL,&#10;  `email` varchar(255) NOT NULL,&#10;  `created_at` timestamp NULL DEFAULT NULL,&#10;  PRIMARY KEY (`id`)&#10;) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+                        placeholder="Please paste your MySQL CREATE TABLE statement...&#10;&#10;Example:&#10;CREATE TABLE `users` (&#10;  `id` bigint unsigned NOT NULL AUTO_INCREMENT,&#10;  `name` varchar(255) NOT NULL,&#10;  `email` varchar(255) NOT NULL,&#10;  `created_at` timestamp NULL DEFAULT NULL,&#10;  PRIMARY KEY (`id`)&#10;) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
                         oninput="updateDDLHighlight()"
                     ></textarea>
                     <div id="ddl-display" class="code-display highlighted-code"></div>
                 </div>
-                <span class="example-link" onclick="loadExample()" data-i18n="load-example">加载示例 DDL</span>
+                <span class="example-link" onclick="loadExample()" data-i18n="load-example">Load Example DDL</span>
             </div>
             
             <div class="form-group">
-                <label data-i18n="select-language">选择目标语言:</label>
+                <label data-i18n="select-language">Select Target Language:</label>
                 <div class="language-selector">
                     <div class="language-option">
                         <input type="radio" id="lang-go" name="language" value="go" checked>
                         <label for="lang-go">
                             <strong>Go</strong><br>
-                            <small data-i18n="go-desc">生成 struct 结构体</small>
+                            <small data-i18n="go-desc">Generate struct</small>
                         </label>
                     </div>
                     <div class="language-option">
                         <input type="radio" id="lang-java" name="language" value="java">
                         <label for="lang-java">
                             <strong>Java</strong><br>
-                            <small data-i18n="java-desc">生成 Entity 类</small>
+                            <small data-i18n="java-desc">Generate Entity class</small>
                         </label>
                     </div>
                     <div class="language-option">
                         <input type="radio" id="lang-php" name="language" value="php">
                         <label for="lang-php">
                             <strong>PHP</strong><br>
-                            <small data-i18n="php-desc">生成 Model 类</small>
+                            <small data-i18n="php-desc">Generate Model class</small>
                         </label>
                     </div>
                     <div class="language-option">
                         <input type="radio" id="lang-python" name="language" value="python">
                         <label for="lang-python">
                             <strong>Python</strong><br>
-                            <small data-i18n="python-desc">生成 Class 类</small>
+                            <small data-i18n="python-desc">Generate Class</small>
                         </label>
                     </div>
                 </div>
             </div>
             
             <button class="generate-btn" onclick="generateCode()" data-i18n="generate-btn">
-                🚀 生成代码
+                🚀 Generate Code
             </button>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p data-i18n="generating">正在生成代码...</p>
+                <p data-i18n="generating">Generating code...</p>
             </div>
             
             <div class="output-section" id="output-section" style="display: none;">
                 <div class="highlight-toggle">
-                    <label for="output-code" data-i18n="output-label">生成的代码:</label>
+                    <label for="output-code" data-i18n="output-label">Generated Code:</label>
                     <label class="highlight-switch">
                         <input type="checkbox" id="output-highlight-toggle" onchange="toggleOutputHighlight()" checked>
                         <span class="highlight-slider"></span>
                     </label>
-                    <span data-i18n="syntax-highlight">语法高亮</span>
+                    <span data-i18n="syntax-highlight">Syntax Highlight</span>
                 </div>
                 <div class="code-container">
                     <textarea id="output-code" class="output-code" readonly style="display: none;"></textarea>
                     <div id="output-display" class="output-code-display highlighted-code active"></div>
                 </div>
-                <button class="copy-btn" onclick="copyToClipboard()" data-i18n="copy-btn">📋 复制代码</button>
+                <button class="copy-btn" onclick="copyToClipboard()" data-i18n="copy-btn">📋 Copy Code</button>
             </div>
             
             <div id="error-message" class="error-message" style="display: none;"></div>
@@ -459,6 +484,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js" integrity="sha512-EBLzUL8XLl+va/zAsmXwS7Z2B1F9HUHkZwyS/VKwh3S7T/U0nF4BaU29EP/ZSf6zgiIxYAnKLu6bJ8dqpmX5uw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>

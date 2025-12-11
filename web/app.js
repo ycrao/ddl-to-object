@@ -22,7 +22,12 @@ const i18nTexts = {
         'error-generation': '生成代码时发生错误: ',
         'error-copy': '复制失败，请手动复制',
         'page-title': 'DDL to Object - 在线转换工具',
-        'syntax-highlight': '语法高亮'
+        'syntax-highlight': '语法高亮',
+        'meta-description': '将 MySQL DDL 语句转换为 Go、Java、PHP 和 Python 的对象结构。免费在线工具，支持语法高亮和双语界面。',
+        'og-title': 'DDL to Object - 在线转换工具',
+        'og-description': '将 MySQL DDL 语句转换为 Go、Java、PHP 和 Python 的对象结构。免费在线工具，支持语法高亮。',
+        'twitter-title': 'DDL to Object - 在线转换工具',
+        'twitter-description': '将 MySQL DDL 语句转换为 Go、Java、PHP 和 Python 的对象结构。'
     },
     en: {
         title: 'DDL to Object',
@@ -44,7 +49,12 @@ const i18nTexts = {
         'error-generation': 'Error occurred while generating code: ',
         'error-copy': 'Copy failed, please copy manually',
         'page-title': 'DDL to Object - Online Conversion Tool',
-        'syntax-highlight': 'Syntax Highlight'
+        'syntax-highlight': 'Syntax Highlight',
+        'meta-description': 'Convert MySQL DDL statements to object structures in Go, Java, PHP, and Python. Free online tool with syntax highlighting and bilingual support.',
+        'og-title': 'DDL to Object - Online Conversion Tool',
+        'og-description': 'Convert MySQL DDL statements to object structures in Go, Java, PHP, and Python. Free online tool with syntax highlighting.',
+        'twitter-title': 'DDL to Object - Online Conversion Tool',
+        'twitter-description': 'Convert MySQL DDL statements to object structures in Go, Java, PHP, and Python.'
     }
 };
 
@@ -54,7 +64,7 @@ let outputHighlightEnabled = true;
 let currentOutputLanguage = 'go';
 
 // 当前语言
-let currentLanguage = 'zh';
+let currentLanguage = 'en';
 
 // 示例 DDL
 const exampleDDL = {
@@ -92,6 +102,11 @@ const exampleDDL = {
 function switchLanguage(lang) {
     currentLanguage = lang;
     
+    // 更新URL查询参数
+    const url = new URL(window.location);
+    url.searchParams.set('lang', lang);
+    window.history.pushState({}, '', url);
+    
     // 更新语言按钮状态
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -105,6 +120,29 @@ function switchLanguage(lang) {
     
     // 更新HTML lang属性
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    
+    // 更新页面标题
+    document.title = i18nTexts[lang]['page-title'];
+}
+
+// 从URL获取语言参数
+function getLanguageFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+    
+    // 验证语言参数
+    if (langParam === 'zh' || langParam === 'en') {
+        return langParam;
+    }
+    
+    // 如果没有有效的URL参数，检测浏览器语言
+    const browserLang = navigator.language || navigator.userLanguage;
+    if (browserLang.startsWith('zh')) {
+        return 'zh';
+    }
+    
+    // 默认返回英语
+    return 'en';
 }
 
 // 更新页面文本
@@ -117,6 +155,8 @@ function updatePageTexts() {
         if (texts[key]) {
             if (element.tagName === 'TITLE') {
                 element.textContent = texts[key];
+            } else if (element.tagName === 'META') {
+                element.setAttribute('content', texts[key]);
             } else {
                 element.textContent = texts[key];
             }
@@ -130,6 +170,29 @@ function updatePageTexts() {
             element.placeholder = texts[key];
         }
     });
+    
+    // 更新canonical URL和alternate links
+    updateSEOLinks();
+}
+
+// 更新SEO相关链接
+function updateSEOLinks() {
+    const baseURL = window.location.origin + window.location.pathname;
+    
+    // 更新canonical URL
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+        canonical.href = baseURL + '?lang=' + currentLanguage;
+    }
+    
+    // 更新alternate links
+    const alternateEn = document.querySelector('link[hreflang="en"]');
+    const alternateZh = document.querySelector('link[hreflang="zh"]');
+    const alternateDefault = document.querySelector('link[hreflang="x-default"]');
+    
+    if (alternateEn) alternateEn.href = baseURL + '?lang=en';
+    if (alternateZh) alternateZh.href = baseURL + '?lang=zh';
+    if (alternateDefault) alternateDefault.href = baseURL;
 }
 
 // 加载示例 DDL
@@ -587,14 +650,11 @@ function showCopySuccess() {
 
 // 页面加载完成后的初始化
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化页面文本
-    updatePageTexts();
+    // 从URL获取语言设置
+    const detectedLang = getLanguageFromURL();
     
-    // 检测浏览器语言
-    const browserLang = navigator.language || navigator.userLanguage;
-    if (browserLang.startsWith('en')) {
-        switchLanguage('en');
-    }
+    // 设置初始语言
+    switchLanguage(detectedLang);
     
     // 等待highlight.js加载完成
     if (window.hljs) {
@@ -608,7 +668,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     }
     
-    console.log('DDL to Object Web App loaded with highlight.js');
+    console.log('DDL to Object Web App loaded with highlight.js, language:', detectedLang);
+});
+
+// 监听浏览器前进后退按钮
+window.addEventListener('popstate', function(event) {
+    const detectedLang = getLanguageFromURL();
+    if (detectedLang !== currentLanguage) {
+        switchLanguage(detectedLang);
+    }
 });
 
 // 初始化语法高亮

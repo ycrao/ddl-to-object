@@ -1,0 +1,11 @@
+services:
+  d2o-server:
+    container_name: d2o-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    restart: unless-stopped

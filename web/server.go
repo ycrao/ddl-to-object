@@ -204,6 +204,7 @@ func handleStatic(w http.ResponseWriter, r *http.Request) {
 		"index.html":  true,
 		"app.js":      true,
 		"style.css":   true,
+		"robots.txt":  true, // SEO robots
 		"favicon.ico": true, // 允许网站图标
 	}
 	
