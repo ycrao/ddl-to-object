@@ -31,11 +31,46 @@ ddl-to-object: 一个工具，帮助从 `SQL DDL` 文件生成不同语言的相
 
 ## 安装
 
-下载目标操作系统 ZIP 压缩文件，解压它，把二进制文件（即 `ddl-to-object` 或 `ddl-to-object.exe`）移动到 `/usr/local/bin/` 或其它可自动加载的环境变量路径下。
+### 快速安装（推荐）
 
-默认情况下，您需要复制项目 `template` 文件到 `~/.dto/template` 目录下（注：`~` 代表当前用户家目录）。
+**Linux/macOS 一行安装命令：**
 
-然后您即可从任何位置在终端 `terminal` 运行它。从它打印帮助或下文中获取帮助。
+```bash
+curl -fsSL https://raw.githubusercontent.com/ycrao/ddl-to-object/main/install-online.sh | bash
+```
+
+此命令将自动完成以下操作：
+
+- 检测你的系统（Linux/macOS）
+- 下载最新版本
+- 安装到 `~/.local/bin/ddl-to-object`
+- 在 `~/.dto/` 目录下创建模板和配置文件
+- 自动更新 `PATH` 环境变量
+
+### 手动安装
+
+1. 从 [Releases](https://github.com/ycrao/ddl-to-object/releases/latest) 下载对应系统的文件：
+   - Linux: `ddl-to-object-linux-*.tar.gz`
+   - macOS (Intel): `ddl-to-object-mac-*.tar.gz`
+   - macOS (ARM64): `ddl-to-object-mac-arm64-*.tar.gz`
+   - Windows: `ddl-to-object-windows-*.zip`
+
+2. 解压并安装：
+
+    ```Bash
+    tar -xzf ddl-to-object-*.tar.gz
+    sudo cp */ddl-to-object /usr/local/bin/
+    mkdir -p ~/.dto
+    cp -r */template ~/.dto/
+    cp */config.json ~/.dto/
+    ```
+
+### 验证安装
+
+```bash
+ddl-to-object version
+ddl-to-object --help
+```
 
 ## 命令帮助
 
