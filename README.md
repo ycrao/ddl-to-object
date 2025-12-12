@@ -31,11 +31,46 @@ PR is welcome! You can do some coding stuff to support another language.
 
 ## Installation
 
-Download targeted OS zip file, unzip it, and move the binary file (`ddl-to-object` or `ddl-to-object.exe`) to `/usr/local/bin/` or other auto-load environment path.
+### Quick Install (Recommended)
 
-By default, you need copy this project template files into to `~/.dto/template` directory manually (note: `~` for current user home workdir).
+**One-line install for Linux/macOS:**
 
-Then you run it in terminal from anywhere. Get helps from its help print or below.
+```bash
+curl -fsSL https://raw.githubusercontent.com/ycrao/ddl-to-object/main/install-online.sh | bash
+```
+
+This will automatically:
+
+- Detect your system (Linux/macOS)
+- Download the latest release
+- Install to `~/.local/bin/ddl-to-object`
+- Set up templates and config in `~/.dto/`
+- Update your PATH
+
+### Manual Install
+
+1. Download the appropriate file from [Releases](https://github.com/ycrao/ddl-to-object/releases/latest):
+   - Linux: `ddl-to-object-linux-*.tar.gz`
+   - macOS (Intel): `ddl-to-object-mac-*.tar.gz`
+   - macOS (ARM64): `ddl-to-object-mac-arm64-*.tar.gz`
+   - Windows: `ddl-to-object-windows-*.zip`
+
+2. Extract and install:
+
+   ```bash
+   tar -xzf ddl-to-object-*.tar.gz
+   sudo cp */ddl-to-object /usr/local/bin/
+   mkdir -p ~/.dto
+   cp -r */template ~/.dto/
+   cp */config.json ~/.dto/
+   ```
+
+### Verify Installation
+
+```bash
+ddl-to-object version
+ddl-to-object --help
+```
 
 ## Command helps
 
@@ -46,7 +81,6 @@ Then you run it in terminal from anywhere. Get helps from its help print or belo
   ddl-to-object python     Generate python target object file
   -c, --config string   config file path (default: ~/.dto/config.json)
   -f, --from path       from path which a single-table DDL file located
-  -h, --help            help for ddl-to-object
   -n, --ns namespace    namespace name for php, only in php command (default: App\Models)
   -p, --pk package      package name, only in java or go command (default: com.example.sample.domain.entity)
   -s, --stdout          enable stdout or not, default set false to disable
